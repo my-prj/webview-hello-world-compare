@@ -22,7 +22,7 @@ The comparison focuses on developer experience, language and dependency footprin
 
 ### Shared application input
 
-- The repository root contains a single shared HTML file that defines the Hello World screen
+- The repository root contains `index.html`, the single shared HTML file that defines the Hello World screen
 - That file shows one line of text, centered vertically and horizontally
 - Every implementation must copy this file byte-for-byte; it is not a reference design to reimplement
 - Do not add extra assets, styling, or content beyond what is required to display that HTML file
@@ -33,7 +33,7 @@ The comparison focuses on developer experience, language and dependency footprin
 - Use these stable slugs consistently: `webview`, `saucer`, `webui`, `neutralinojs`, `tauri`
 - Store downloaded dependencies, toolchains, caches, build outputs, and other reconstructible files under `temp/<slug>/`
 - Do not share implementation-specific files, caches, dependencies, or build outputs between slugs
-- The only shared input across implementations is the versioned root HTML file
+- The only shared input across implementations is the versioned root `index.html` file
 
 ### Platform and build output
 
@@ -101,6 +101,7 @@ Measure these objective values for every slug:
 | T4 | GitHub Actions build duration | GitHub Actions run data |
 | Result `.app` | Final uncompressed application bundle size | CI artifact from phase 3 |
 
+- Measure Result `.app` with `du -sk <path-to>.app` and report the size in kilobytes
 - Do not split agent time from network, build, or waiting overhead; total wall time is the metric
 - Record T1–T4 in the result table Notes column unless separate timing columns are added later
 - Dependency and toolchain weight belong in the Dependencies column or Notes when measured
