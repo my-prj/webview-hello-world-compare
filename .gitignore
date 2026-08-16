@@ -1,0 +1,2 @@
+# Fully reproducible local working area: build output, toolchains, caches, and test files.
+temp/
