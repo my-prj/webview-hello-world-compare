@@ -1,0 +1,88 @@
+name: webview
+
+on:
+  push:
+    paths:
+      - ".github/workflows/webview.yml"
+      - "implementations/webview/**"
+      - "index.html"
+  pull_request:
+    paths:
+      - ".github/workflows/webview.yml"
+      - "implementations/webview/**"
+      - "index.html"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Record runner and system toolchain
+        id: env
+        run: |
+          set -euo pipefail
+          {
+            echo "runner_image=${RUNNER_OS}-${ImageOS:-unknown}"
+            echo "macos_version=$(sw_vers -productVersion)"
+            echo "macos_build=$(sw_vers -buildVersion)"
+            echo "arch=$(uname -m)"
+            echo "clang_version=$(clang --version | head -n 1)"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "## Runner" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Image: \`${RUNNER_OS}\` / \`${ImageOS:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- macOS: $(sw_vers -productVersion) ($(sw_vers -buildVersion))" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Arch: $(uname -m)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Clang: $(clang --version | head -n 1)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Setup dependencies
+        run: ./implementations/webview/setup-deps.sh
+
+      - name: Record vendored tool versions
+        id: tools
+        run: |
+          set -euo pipefail
+          export PATH="$PWD/temp/webview/tools/cmake/CMake.app/Contents/bin:$PWD/temp/webview/tools/ninja:$PATH"
+          {
+            echo "cmake_version=$(cmake --version | head -n 1)"
+            echo "ninja_version=$(ninja --version)"
+            echo "webview_version=$(git -C temp/webview/src/webview describe --tags --always)"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "## Tools" >> "$GITHUB_STEP_SUMMARY"
+          echo "- CMake: $(cmake --version | head -n 1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Ninja: $(ninja --version)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- webview: $(git -C temp/webview/src/webview describe --tags --always)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build unsigned release .app
+        run: ./implementations/webview/build.sh
+
+      - name: Measure .app size
+        id: size
+        run: |
+          set -euo pipefail
+          APP="$PWD/temp/webview/HelloWorld.app"
+          test -d "$APP"
+          KB="$(du -sk "$APP" | awk '{print $1}')"
+          echo "app_size_kb=$KB" >> "$GITHUB_OUTPUT"
+          echo "## Result" >> "$GITHUB_STEP_SUMMARY"
+          echo "- \`HelloWorld.app\`: **${KB} KB** (\`du -sk\`)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create release archive
+        run: |
+          set -euo pipefail
+          cd temp/webview
+          ditto -c -k --sequesterResource --keepParent HelloWorld.app HelloWorld.app.zip
+          du -sk HelloWorld.app.zip
+
+      - name: Upload release archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: webview-HelloWorld.app
+          path: temp/webview/HelloWorld.app.zip
+          if-no-files-found: error

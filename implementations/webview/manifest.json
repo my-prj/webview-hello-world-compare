@@ -1,0 +1,89 @@
+{
+  "slug": "webview",
+  "upstream": "https://github.com/webview/webview",
+  "phase": 2,
+  "run_date": "2026-08-16",
+  "platform": {
+    "os": "macOS",
+    "arch": "arm64"
+  },
+  "components": {
+    "webview": {
+      "version": "0.12.0",
+      "commit": "3ab4b5d722438fc8a13e6ca830c5e2372d19a01d",
+      "source": "temp/webview/src/webview",
+      "fetch": {
+        "url": "https://github.com/webview/webview.git",
+        "ref": "0.12.0"
+      },
+      "usage": "header-only via webview::core (add_subdirectory)"
+    },
+    "cmake": {
+      "version": "4.4.2",
+      "install": "temp/webview/tools/cmake",
+      "download": {
+        "url": "https://github.com/Kitware/CMake/releases/download/v4.4.2/cmake-4.4.2-macos-universal.tar.gz",
+        "archive": "temp/webview/downloads/cmake-4.4.2-macos-universal.tar.gz"
+      },
+      "binary": "temp/webview/tools/cmake/CMake.app/Contents/bin/cmake"
+    },
+    "ninja": {
+      "version": "1.13.2",
+      "install": "temp/webview/tools/ninja",
+      "download": {
+        "url": "https://github.com/ninja-build/ninja/releases/download/v1.13.2/ninja-mac.zip",
+        "archive": "temp/webview/downloads/ninja-mac.zip"
+      },
+      "binary": "temp/webview/tools/ninja/ninja"
+    },
+    "compiler": {
+      "name": "Apple Clang",
+      "version": "21.0.0 (clang-2100.1.1.101)",
+      "provider": "Xcode Command Line Tools",
+      "path": "/Library/Developer/CommandLineTools",
+      "note": "System toolchain; not vendored under temp/webview/"
+    },
+    "macos_frameworks": {
+      "runtime": ["WebKit"],
+      "link": ["dl"],
+      "note": "Provided by macOS SDK via Command Line Tools"
+    }
+  },
+  "implementation": {
+    "languages": ["C++11"],
+    "entry": "implementations/webview/main.cpp",
+    "build_script": "implementations/webview/build.sh",
+    "cmake": "implementations/webview/CMakeLists.txt",
+    "html": "implementations/webview/index.html",
+    "bundle_name": "HelloWorld.app",
+    "bundle_id": "com.webview-hello-world-compare.webview",
+    "size_optimization": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CXX_FLAGS_RELEASE": "-Os -DNDEBUG",
+      "CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE": true,
+      "post_build_strip": "strip -x"
+    }
+  },
+  "paths": {
+    "temp_root": "temp/webview",
+    "downloads": "temp/webview/downloads",
+    "tools": "temp/webview/tools",
+    "source": "temp/webview/src/webview",
+    "build_release": "temp/webview/build-release",
+    "app_output": "temp/webview/HelloWorld.app"
+  },
+  "env": {
+    "PATH_prefix": [
+      "temp/webview/tools/cmake/CMake.app/Contents/bin",
+      "temp/webview/tools/ninja"
+    ]
+  },
+  "metrics": {
+    "temp_webview_size_kb": 373376,
+    "temp_webview_size_human": "364M",
+    "phase1_wall_seconds": 294,
+    "phase2_wall_seconds": 34,
+    "local_app_size_kb": 80,
+    "local_app_path": "temp/webview/HelloWorld.app"
+  }
+}
