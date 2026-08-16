@@ -106,7 +106,31 @@
     "build_sh_seconds": 2,
     "local_app_size_kb": 2840,
     "local_app_binary_kb": 2820,
-    "local_app_path": "temp/neutralinojs/HelloWorld.app"
+    "local_app_path": "temp/neutralinojs/HelloWorld.app",
+    "phase3_wall_seconds": 195,
+    "ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963765822",
+    "ci_run_id": 31963765822,
+    "ci_app_size_kb": 2824,
+    "ci_zip_size_kb": 872,
+    "ci_job_seconds": 21
+  },
+  "ci": {
+    "workflow": ".github/workflows/neutralinojs.yml",
+    "status": "success",
+    "commit": "25884f7",
+    "runner": {
+      "image": "macos-26-arm64",
+      "release": "20260728.0273",
+      "macos_version": "26.5.2"
+    },
+    "toolchain": {
+      "node": "v24.18.0",
+      "npm": "11.16.0"
+    },
+    "artifact": {
+      "name": "neutralinojs-HelloWorld.app",
+      "path": "temp/neutralinojs/HelloWorld.app.zip"
+    }
   },
   "blockers": []
 }

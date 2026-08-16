@@ -37,3 +37,10 @@ Reproduce: `./implementations/neutralinojs/build.sh` → `temp/neutralinojs/Hell
 
 - Framework runtime uses system WebKit; no extra runtime bundled beyond the Neutralino binary with embedded resources.
 - GUI smoke test via `open` was not reliable in the agent shell (Launch Services error 163); direct execution and `neu run` start successfully.
+
+### CI results
+
+- Successful run: [31963765822](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963765822).
+- T3 (DevOps session): **195 s** — workflow setup and push; GHA run completed without queue wait.
+- T4 (job): **21 s**; Result `.app`: **2824 KB** (local preview 2840 KB); zip artifact: 872 KB.
+- Runner: macOS 26.5.2; Node v24.18.0, npm 11.16.0; neutralinojs v6.9.0, neu CLI 11.7.2.
