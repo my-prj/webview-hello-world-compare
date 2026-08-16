@@ -1,0 +1,88 @@
+name: saucer
+
+on:
+  push:
+    paths:
+      - ".github/workflows/saucer.yml"
+      - "implementations/saucer/**"
+      - "index.html"
+  pull_request:
+    paths:
+      - ".github/workflows/saucer.yml"
+      - "implementations/saucer/**"
+      - "index.html"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-26-arm64
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Record runner and system toolchain
+        id: env
+        run: |
+          set -euo pipefail
+          {
+            echo "runner_image=${RUNNER_OS}-${ImageOS:-unknown}"
+            echo "macos_version=$(sw_vers -productVersion)"
+            echo "macos_build=$(sw_vers -buildVersion)"
+            echo "arch=$(uname -m)"
+            echo "clang_version=$(clang --version | head -n 1)"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "## Runner" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Image: \`${RUNNER_OS}\` / \`${ImageOS:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- macOS: $(sw_vers -productVersion) ($(sw_vers -buildVersion))" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Arch: $(uname -m)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Clang: $(clang --version | head -n 1)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Setup dependencies
+        run: ./implementations/saucer/setup-deps.sh
+
+      - name: Record vendored tool versions
+        id: tools
+        run: |
+          set -euo pipefail
+          export PATH="$PWD/temp/saucer/tools/cmake/CMake.app/Contents/bin:$PWD/temp/saucer/tools/ninja:$PATH"
+          {
+            echo "cmake_version=$(cmake --version | head -n 1)"
+            echo "ninja_version=$(ninja --version)"
+            echo "saucer_version=$(git -C temp/saucer/src/saucer describe --tags --always)"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "## Tools" >> "$GITHUB_STEP_SUMMARY"
+          echo "- CMake: $(cmake --version | head -n 1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Ninja: $(ninja --version)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- saucer: $(git -C temp/saucer/src/saucer describe --tags --always)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build unsigned release .app
+        run: ./implementations/saucer/build.sh
+
+      - name: Measure .app size
+        id: size
+        run: |
+          set -euo pipefail
+          APP="$PWD/temp/saucer/HelloWorld.app"
+          test -d "$APP"
+          KB="$(du -sk "$APP" | awk '{print $1}')"
+          echo "app_size_kb=$KB" >> "$GITHUB_OUTPUT"
+          echo "## Result" >> "$GITHUB_STEP_SUMMARY"
+          echo "- \`HelloWorld.app\`: **${KB} KB** (\`du -sk\`)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create release archive
+        run: |
+          set -euo pipefail
+          cd temp/saucer
+          ditto -c -k --keepParent HelloWorld.app HelloWorld.app.zip
+          du -sk HelloWorld.app.zip
+
+      - name: Upload release archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: saucer-HelloWorld.app
+          path: temp/saucer/HelloWorld.app.zip
+          if-no-files-found: error

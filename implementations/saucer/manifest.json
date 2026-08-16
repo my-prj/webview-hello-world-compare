@@ -1,0 +1,118 @@
+{
+  "slug": "saucer",
+  "upstream": "https://github.com/saucer/saucer",
+  "phase": 2,
+  "run_date": "2026-08-16",
+  "platform": {
+    "os": "macOS",
+    "arch": "arm64"
+  },
+  "components": {
+    "saucer": {
+      "version": "8.0.5",
+      "tag": "v8.0.5",
+      "commit": "68345fa45a7465fe5a62b699b51847b916c8c16a",
+      "source": "temp/saucer/src/saucer",
+      "fetch": {
+        "url": "https://github.com/saucer/saucer.git",
+        "ref": "v8.0.5"
+      },
+      "backend": "WebKit",
+      "serializer": "Glaze",
+      "usage": "static libsaucer.a via add_subdirectory"
+    },
+    "cmake": {
+      "version": "4.4.2",
+      "install": "temp/saucer/tools/cmake",
+      "download": {
+        "url": "https://github.com/Kitware/CMake/releases/download/v4.4.2/cmake-4.4.2-macos-universal.tar.gz",
+        "archive": "temp/saucer/downloads/cmake-4.4.2-macos-universal.tar.gz"
+      },
+      "binary": "temp/saucer/tools/cmake/CMake.app/Contents/bin/cmake"
+    },
+    "ninja": {
+      "version": "1.13.2",
+      "install": "temp/saucer/tools/ninja",
+      "download": {
+        "url": "https://github.com/ninja-build/ninja/releases/download/v1.13.2/ninja-mac.zip",
+        "archive": "temp/saucer/downloads/ninja-mac.zip"
+      },
+      "binary": "temp/saucer/tools/ninja/ninja"
+    },
+    "cpm": {
+      "version": "0.41.0",
+      "cache": "temp/saucer/cpm-cache",
+      "env": "CPM_SOURCE_CACHE=temp/saucer/cpm-cache"
+    },
+    "cpm_packages": {
+      "lockpp": { "version": "3.2.0", "commit": "a9fdb95d41e0c2ae1c81810012a1ccf94c479123" },
+      "coco": { "version": "4.3.0", "commit": "766203c8d4a90f6217d5508cefd2f592c15ade67" },
+      "rebind": { "version": "5.3.1", "commit": "d382a4737c8293a55216e0b738ceaafa2fc0a3d6" },
+      "ereignis": { "version": "6.3.0", "commit": "941aefbe86801f3796ec6e776d3e81f83a2c573f" },
+      "flagpp": { "version": "3.1.0", "commit": "c8f892e0612169914d31396bd36eb659becfcd97" },
+      "polo": { "version": "1.0.2", "commit": "df6332eb7600dccc8c5393f0a6a24722e7d5f3d7" },
+      "saucer-fill": { "version": "1.3.0", "commit": "c66470213dd58cf326cafea6f4376da17c68a1f0" },
+      "saucer-embed": { "version": "1.1.1", "commit": "01ceeb4d9e1c7eaa3ac5640d9c13bc3ad0fd0bce" },
+      "glaze": { "version": "7.0.2", "commit": "459946d325c497c274fa59d666bd7cb6e2dd7ad0" },
+      "functional": { "version": "1.0.2", "commit": "bdb098751ccdba3e03b429064473c70e228a885e", "note": "transitive via saucer-fill" },
+      "packageproject": { "version": "1.13.0", "commit": "738d2ed9dba67e01ac2ea2a6d0f8d35c198fed32", "note": "fetched during configure; Package-Config disabled due to nontype_functional" }
+    },
+    "compiler": {
+      "name": "Apple Clang",
+      "version": "21.0.0 (clang-2100.1.1.101)",
+      "provider": "Xcode Command Line Tools",
+      "path": "/Library/Developer/CommandLineTools",
+      "note": "System toolchain; not vendored under temp/saucer/"
+    },
+    "macos_frameworks": {
+      "runtime": ["Cocoa", "WebKit", "CoreImage"],
+      "note": "WebKit backend; provided by macOS SDK via Command Line Tools"
+    }
+  },
+  "implementation": {
+    "languages": ["C++23", "Objective-C++"],
+    "entry": "implementations/saucer/main.cpp",
+    "build_script": "implementations/saucer/build.sh",
+    "cmake": "implementations/saucer/CMakeLists.txt",
+    "html": "implementations/saucer/index.html",
+    "bundle_name": "HelloWorld.app",
+    "bundle_id": "com.webview-hello-world-compare.saucer",
+    "size_optimization": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CXX_FLAGS_RELEASE": "-Os -DNDEBUG",
+      "CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE": true,
+      "post_build_strip": "strip -x"
+    }
+  },
+  "paths": {
+    "temp_root": "temp/saucer",
+    "downloads": "temp/saucer/downloads",
+    "tools": "temp/saucer/tools",
+    "source": "temp/saucer/src/saucer",
+    "cpm_cache": "temp/saucer/cpm-cache",
+    "prefetch_build": "temp/saucer/prefetch-build",
+    "build_release": "temp/saucer/build-release",
+    "app_output": "temp/saucer/HelloWorld.app"
+  },
+  "env": {
+    "PATH_prefix": [
+      "temp/saucer/tools/cmake/CMake.app/Contents/bin",
+      "temp/saucer/tools/ninja"
+    ],
+    "CPM_SOURCE_CACHE": "temp/saucer/cpm-cache"
+  },
+  "metrics": {
+    "temp_saucer_size_kb": 427796,
+    "temp_saucer_size_human": "418M",
+    "phase1_wall_seconds": 302,
+    "phase2_wall_seconds": 240,
+    "phase2_build_script_seconds": 16,
+    "local_app_size_kb": 336,
+    "local_app_binary_kb": 328,
+    "local_app_path": "temp/saucer/HelloWorld.app"
+  },
+  "setup": {
+    "script": "implementations/saucer/setup-deps.sh",
+    "prefetch": "cmake configure of upstream saucer v8.0.5 with CPM_SOURCE_CACHE to download transitive git deps"
+  }
+}

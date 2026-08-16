@@ -1,0 +1,31 @@
+# saucer — experience log
+
+## Phase 1 (2026-08-16)
+
+See `manifest.json` for dependency versions and download weight (~385M under `temp/saucer/`).
+
+## Phase 2 (2026-08-16)
+
+### Implementation
+
+- C++23 coroutine app (`main.cpp`) using `saucer::smartview` with WebKit backend via `add_subdirectory` on the phase-1 source tree.
+- Shared root `index.html` copied byte-for-byte into `implementations/saucer/index.html` and bundled under `Contents/Resources/`.
+- Loads HTML with `saucer::url::from(bundle_path)` + `webview->set_url(...)`.
+- CMake `MACOSX_BUNDLE` produces `hello-world.app`; `build.sh` copies it to `temp/saucer/HelloWorld.app`.
+
+### Build friction
+
+- Saucer pulls 11 transitive CPM git deps (coco, glaze, lockpp, …); first configure is slow, rebuild uses `CPM_SOURCE_CACHE`.
+- Harmless CMake warnings about Package-Config when `nontype_functional` is in the dependency graph (same as phase 1 prefetch).
+- Requires C++23 and OBJCXX; Apple Clang 21 builds cleanly.
+- No upstream macOS `.app` example; bundle layout (`Info.plist`, Resources copy, `_NSGetExecutablePath`) is manual, same pattern as `webview`.
+
+### Size optimization
+
+- Release with `-Os`, LTO, hidden visibility, and `strip -x` post-link.
+- Static link of `libsaucer.a` plus Glaze serializer; Result `.app` is **336 KB** on disk (`du -sk`); binary alone ~328 KB.
+- Runtime WebKit/Cocoa/CoreImage come from the OS, not the bundle.
+
+### Reproducibility
+
+- `./implementations/saucer/build.sh` runs `setup-deps.sh`, syncs HTML, configures Ninja release for `arm64`, builds, and stages the app under `temp/saucer/HelloWorld.app`.
