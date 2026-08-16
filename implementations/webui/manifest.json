@@ -1,0 +1,96 @@
+{
+  "slug": "webui",
+  "upstream": "https://github.com/webui-dev/webui",
+  "phase": 3,
+  "phase_status": "partial",
+  "run_date": "2026-08-16",
+  "platform": {
+    "os": "macOS",
+    "arch": "arm64"
+  },
+  "version_selection": {
+    "requested": "latest stable (2026-08-16)",
+    "latest_stable_tag": "2.4.2",
+    "latest_stable_note": "Stable 2.4.2 has no macOS WKWebView sources (src/webview/ absent); browser-only mode.",
+    "selected_tag": "2.5.0-beta.3",
+    "selected_reason": "Latest upstream tag that ships src/webview/wkwebview.m required for macOS WebView comparison."
+  },
+  "components": {
+    "webui": {
+      "version": "2.5.0-beta.3",
+      "tag": "2.5.0-beta.3",
+      "commit": "fd716ddcac980eee9f8f0c6fb6a94a240343fad0",
+      "source": "temp/webui/src/webui",
+      "fetch": {
+        "url": "https://github.com/webui-dev/webui.git",
+        "ref": "2.5.0-beta.3"
+      },
+      "build": {
+        "command": "make -f GNUmakefile ARCH_TARGET=arm64 release",
+        "outputs": {
+          "static_lib": "temp/webui/src/webui/dist/libwebui-2-static.a",
+          "dynamic_lib": "temp/webui/src/webui/dist/webui-2.dylib",
+          "headers": "temp/webui/src/webui/include/"
+        }
+      },
+      "bridge": {
+        "note": "webui_bridge.h committed in upstream; esbuild/npm not required for phase 1"
+      }
+    },
+    "compiler": {
+      "name": "Apple Clang",
+      "version": "21.0.0 (clang-2100.1.1.101)",
+      "provider": "Xcode Command Line Tools",
+      "path": "/Library/Developer/CommandLineTools",
+      "note": "System toolchain; not vendored under temp/webui/"
+    },
+    "macos_frameworks": {
+      "runtime": ["Cocoa", "WebKit"],
+      "note": "WKWebView backend; provided by macOS SDK via Command Line Tools"
+    }
+  },
+  "paths": {
+    "temp_root": "temp/webui",
+    "source": "temp/webui/src/webui",
+    "library_dist": "temp/webui/src/webui/dist",
+    "app_output": "temp/webui/HelloWorld.app"
+  },
+  "setup": {
+    "script": "implementations/webui/setup-deps.sh"
+  },
+  "build": {
+    "script": "implementations/webui/build.sh",
+    "language": "C++17",
+    "link": "static libwebui-2-static.a"
+  },
+  "metrics": {
+    "temp_webui_size_kb": 14600,
+    "temp_webui_size_human": "14M",
+    "phase1_wall_seconds": 41,
+    "phase2_wall_seconds": 480,
+    "build_sh_seconds": 1,
+    "library_static_kb": 336,
+    "library_dynamic_kb": 274,
+    "app_size_kb": 220,
+    "app_binary_kb": 209,
+    "local_app_size_kb": 220,
+    "local_app_path": "temp/webui/HelloWorld.app",
+    "phase3_wall_seconds": null,
+    "ci_run_url": null,
+    "ci_run_id": null,
+    "ci_app_size_kb": null,
+    "ci_job_seconds": null
+  },
+  "ci": {
+    "workflow": ".github/workflows/webui.yml",
+    "status": "pending",
+    "commit": null,
+    "runner": {
+      "image": "macos-26-arm64"
+    },
+    "artifact": {
+      "name": "webui-HelloWorld.app",
+      "path": "temp/webui/HelloWorld.app.zip"
+    }
+  }
+}
