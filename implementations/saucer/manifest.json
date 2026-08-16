@@ -1,7 +1,8 @@
 {
   "slug": "saucer",
   "upstream": "https://github.com/saucer/saucer",
-  "phase": 2,
+  "phase": 3,
+  "phase_status": "partial",
   "run_date": "2026-08-16",
   "platform": {
     "os": "macOS",
@@ -50,7 +51,7 @@
       "rebind": { "version": "5.3.1", "commit": "d382a4737c8293a55216e0b738ceaafa2fc0a3d6" },
       "ereignis": { "version": "6.3.0", "commit": "941aefbe86801f3796ec6e776d3e81f83a2c573f" },
       "flagpp": { "version": "3.1.0", "commit": "c8f892e0612169914d31396bd36eb659becfcd97" },
-      "polo": { "version": "1.0.2", "commit": "df6332eb7600dccc8c5393f0a6a24722e7d5f3d7" },
+      "polo": { "version": "1.0.2", "commit": "df6332eb7600dccc8c5393a6a24722e7d5f3d7" },
       "saucer-fill": { "version": "1.3.0", "commit": "c66470213dd58cf326cafea6f4376da17c68a1f0" },
       "saucer-embed": { "version": "1.1.1", "commit": "01ceeb4d9e1c7eaa3ac5640d9c13bc3ad0fd0bce" },
       "glaze": { "version": "7.0.2", "commit": "459946d325c497c274fa59d666bd7cb6e2dd7ad0" },
@@ -107,9 +108,30 @@
     "phase1_wall_seconds": 302,
     "phase2_wall_seconds": 240,
     "phase2_build_script_seconds": 16,
+    "phase3_wall_seconds": null,
     "local_app_size_kb": 336,
     "local_app_binary_kb": 328,
-    "local_app_path": "temp/saucer/HelloWorld.app"
+    "local_app_path": "temp/saucer/HelloWorld.app",
+    "ci_run_url": null,
+    "ci_run_id": null,
+    "ci_app_size_kb": null,
+    "ci_job_seconds": null,
+    "previous_ci_run_id": 31960312213,
+    "previous_ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31960312213",
+    "previous_ci_run_note": "cancelled after ~45 min GHA queue; rolled back"
+  },
+  "ci": {
+    "workflow": ".github/workflows/saucer.yml",
+    "status": "pending",
+    "commit": null,
+    "runner": {
+      "image": "macos-latest",
+      "note": "Apple Silicon arm64; same label as webview workflow"
+    },
+    "artifact": {
+      "name": "saucer-HelloWorld.app",
+      "path": "temp/saucer/HelloWorld.app.zip"
+    }
   },
   "setup": {
     "script": "implementations/saucer/setup-deps.sh",

@@ -29,3 +29,18 @@ See `manifest.json` for dependency versions and download weight (~385M under `te
 ### Reproducibility
 
 - `./implementations/saucer/build.sh` runs `setup-deps.sh`, syncs HTML, configures Ninja release for `arm64`, builds, and stages the app under `temp/saucer/HelloWorld.app`.
+
+## Phase 3 (2026-08-16, partial — redo)
+
+### GitHub Actions
+
+- Workflow: `.github/workflows/saucer.yml` on `macos-latest` (Apple Silicon; same pattern as `webview`).
+- Mirrors local contract: `setup-deps.sh` → `build.sh` → `du -sk` → zip artifact.
+
+### Previous attempt (rolled back)
+
+- Run [31960312213](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31960312213) — **cancelled** after ~45 min in GHA queue; prior DevOps session interrupted (~34 min wall time including queue — not a reliable T3).
+
+### CI status (pending)
+
+- T4 and CI Result `.app`: **pending** until the new workflow run completes.
