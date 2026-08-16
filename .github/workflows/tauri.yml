@@ -1,0 +1,98 @@
+name: tauri
+
+on:
+  push:
+    paths:
+      - ".github/workflows/tauri.yml"
+      - "implementations/tauri/**"
+      - "index.html"
+  pull_request:
+    paths:
+      - ".github/workflows/tauri.yml"
+      - "implementations/tauri/**"
+      - "index.html"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Record runner and system toolchain
+        id: env
+        run: |
+          set -euo pipefail
+          {
+            echo "runner_image=${RUNNER_OS}-${ImageOS:-unknown}"
+            echo "macos_version=$(sw_vers -productVersion)"
+            echo "macos_build=$(sw_vers -buildVersion)"
+            echo "arch=$(uname -m)"
+            echo "clang_version=$(clang --version | head -n 1)"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "## Runner" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Image: \`${RUNNER_OS}\` / \`${ImageOS:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- macOS: $(sw_vers -productVersion) ($(sw_vers -buildVersion))" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Arch: $(uname -m)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Clang: $(clang --version | head -n 1)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Setup dependencies
+        run: ./implementations/tauri/setup-deps.sh
+
+      - name: Record vendored tool versions
+        id: tools
+        run: |
+          set -euo pipefail
+          export RUSTUP_HOME="$PWD/temp/tauri/rustup"
+          export CARGO_HOME="$PWD/temp/tauri/cargo"
+          export PATH="$CARGO_HOME/bin:$PWD/temp/tauri/npm/node_modules/.bin:$PATH"
+          {
+            echo "rustc_version=$(rustc --version)"
+            echo "cargo_version=$(cargo --version)"
+            echo "rustup_toolchain=$(rustup show active-toolchain | head -n 1)"
+            echo "node_version=$(node --version)"
+            echo "npm_version=$(npm --version)"
+            echo "tauri_cli_version=$(tauri --version | head -n 1)"
+            echo "tauri_crate_version=$(grep '^name = "tauri"$' -A 1 implementations/tauri/src-tauri/Cargo.lock | grep version | sed 's/.*"\(.*\)".*/\1/')"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "## Tools" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Rust: $(rustc --version)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Cargo: $(cargo --version)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Toolchain: $(rustup show active-toolchain | head -n 1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Node: $(node --version)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- npm: $(npm --version)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- tauri CLI: $(tauri --version | head -n 1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- tauri crate: $(grep '^name = "tauri"$' -A 1 implementations/tauri/src-tauri/Cargo.lock | grep version | sed 's/.*"\(.*\)".*/\1/')" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build unsigned release .app
+        run: ./implementations/tauri/build.sh
+
+      - name: Measure .app size
+        id: size
+        run: |
+          set -euo pipefail
+          APP="$PWD/temp/tauri/HelloWorld.app"
+          test -d "$APP"
+          KB="$(du -sk "$APP" | awk '{print $1}')"
+          echo "app_size_kb=$KB" >> "$GITHUB_OUTPUT"
+          echo "## Result" >> "$GITHUB_STEP_SUMMARY"
+          echo "- \`HelloWorld.app\`: **${KB} KB** (\`du -sk\`)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create release archive
+        run: |
+          set -euo pipefail
+          cd temp/tauri
+          ditto -c -k --keepParent HelloWorld.app HelloWorld.app.zip
+          du -sk HelloWorld.app.zip
+
+      - name: Upload release archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-HelloWorld.app
+          path: temp/tauri/HelloWorld.app.zip
+          if-no-files-found: error

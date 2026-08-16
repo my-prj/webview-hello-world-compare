@@ -1,0 +1,8 @@
+{
+  "name": "webview-hello-world-compare-tauri-deps",
+  "private": true,
+  "description": "Phase-1 dependency manifest for Tauri CLI (isolated under temp/tauri/npm/)",
+  "devDependencies": {
+    "@tauri-apps/cli": "2.11.4"
+  }
+}
