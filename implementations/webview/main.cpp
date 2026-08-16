@@ -31,6 +31,7 @@ int main() {
   try {
     webview::webview window(false, nullptr);
     window.set_title("Hello World");
+    window.set_size(480, 320, WEBVIEW_HINT_NONE);
 
     const std::string url = html_file_url();
     if (url.empty()) {
