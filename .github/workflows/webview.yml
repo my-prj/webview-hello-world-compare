@@ -77,7 +77,7 @@ jobs:
         run: |
           set -euo pipefail
           cd temp/webview
-          ditto -c -k --sequesterResource --keepParent HelloWorld.app HelloWorld.app.zip
+          ditto -c -k --keepParent HelloWorld.app HelloWorld.app.zip
           du -sk HelloWorld.app.zip
 
       - name: Upload release archive
