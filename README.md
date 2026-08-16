@@ -10,7 +10,7 @@ The comparison focuses on developer experience, language and dependency footprin
 
 | Project | Link | Result `.app` | Languages | Dependencies | Notes |
 | --- | --- | --- | --- | --- | --- |
-| webview/webview | https://github.com/webview/webview | TBD | TBD | TBD | TBD |
+| webview/webview | https://github.com/webview/webview | 80 KB | C++11 | webview 0.12.0 (header-only); vendored CMake 4.4.2 + Ninja 1.13.2 (~364M under `temp/webview/`) | T1=294s, T2=34s, T3=620s, T4=25s; runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, AppleClang 21.0.0; artifact zip 20 KB; [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31959767420) |
 | Saucer | https://github.com/saucer/saucer | TBD | TBD | TBD | TBD |
 | WebUI | https://github.com/webui-dev/webui | TBD | TBD | TBD | TBD |
 | Neutralinojs | https://github.com/neutralinojs/neutralinojs | TBD | TBD | TBD | TBD |

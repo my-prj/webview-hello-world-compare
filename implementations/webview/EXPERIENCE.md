@@ -40,3 +40,17 @@
 ### Reproducibility
 
 - `./implementations/webview/build.sh` runs `setup-deps.sh`, syncs HTML, configures Ninja release for `arm64`, builds, and stages the app under `temp/webview/HelloWorld.app`.
+
+## Phase 3 (2026-08-16)
+
+### GitHub Actions
+
+- Workflow: `.github/workflows/webview.yml` on `macos-latest` (`macos-26-arm64`, release `20260728.0273`).
+- Mirrors local contract: `setup-deps.sh` → `build.sh` → `du -sk` → zip artifact.
+- First run failed on `ditto --sequesterResource` (unsupported on GHA runner); fixed by using `ditto -c -k --keepParent` only.
+
+### CI results
+
+- Successful run: [31959767420](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31959767420).
+- T4 (job): 25 s; Result `.app`: **80 KB** (matches local); zip artifact: 20 KB.
+- Runner: macOS 26.5.2, AppleClang 21.0.0; vendored CMake 4.4.2, Ninja 1.13.2, webview 0.12.0.

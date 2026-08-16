@@ -1,7 +1,7 @@
 {
   "slug": "webview",
   "upstream": "https://github.com/webview/webview",
-  "phase": 2,
+  "phase": 3,
   "run_date": "2026-08-16",
   "platform": {
     "os": "macOS",
@@ -83,7 +83,28 @@
     "temp_webview_size_human": "364M",
     "phase1_wall_seconds": 294,
     "phase2_wall_seconds": 34,
+    "phase3_wall_seconds": 620,
     "local_app_size_kb": 80,
-    "local_app_path": "temp/webview/HelloWorld.app"
+    "local_app_path": "temp/webview/HelloWorld.app",
+    "ci_app_size_kb": 80,
+    "ci_zip_size_kb": 20,
+    "ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31959767420",
+    "ci_run_id": 31959767420,
+    "ci_job_seconds": 25
+  },
+  "ci": {
+    "workflow": ".github/workflows/webview.yml",
+    "runner": {
+      "image": "macos-26-arm64",
+      "release": "20260728.0273",
+      "macos_version": "26.5.2"
+    },
+    "toolchain": {
+      "apple_clang": "21.0.0.21000101"
+    },
+    "artifact": {
+      "name": "webview-HelloWorld.app",
+      "path": "temp/webview/HelloWorld.app.zip"
+    }
   }
 }
