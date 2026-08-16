@@ -54,3 +54,12 @@
 - Successful run: [31959767420](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31959767420).
 - T4 (job): 25 s; Result `.app`: **80 KB** (matches local); zip artifact: 20 KB.
 - Runner: macOS 26.5.2, AppleClang 21.0.0; vendored CMake 4.4.2, Ninja 1.13.2, webview 0.12.0.
+
+## Post-phase fix (2026-08-16)
+
+### Finder launch: invisible window
+
+- Double-clicking `HelloWorld.app` showed a Dock icon but no window.
+- On macOS, webview creates `NSWindow` at **0×0**; visible size requires an explicit `set_size()` call (upstream `examples/basic.cc` includes it; there is no macOS `.app` example in the repo).
+- Fix: `window.set_size(480, 320, WEBVIEW_HINT_NONE)` in `main.cpp`.
+- **Impact on pure implementation work:** negligible — a one-line call, no new dependencies or build changes. Easy to miss in the first phase-2 iteration when focusing on bundle layout and `file://` HTML loading without cross-checking the basic example.
