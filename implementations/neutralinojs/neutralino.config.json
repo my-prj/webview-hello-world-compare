@@ -1,0 +1,38 @@
+{
+  "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
+  "applicationId": "com.webview-hello-world-compare.neutralinojs",
+  "version": "1.0.0",
+  "defaultMode": "window",
+  "port": 0,
+  "documentRoot": "/resources/",
+  "url": "/",
+  "enableServer": true,
+  "enableNativeAPI": false,
+  "logging": {
+    "enabled": false,
+    "writeToLogFile": false
+  },
+  "modes": {
+    "window": {
+      "title": "Hello World",
+      "width": 400,
+      "height": 200,
+      "center": true,
+      "fullScreen": false,
+      "alwaysOnTop": false,
+      "enableInspector": false,
+      "borderless": false,
+      "maximize": false,
+      "hidden": false,
+      "resizable": false,
+      "exitProcessOnClose": true
+    }
+  },
+  "cli": {
+    "binaryName": "hello-world",
+    "resourcesPath": "/resources/",
+    "binaryVersion": "6.9.0",
+    "clientVersion": "6.9.0",
+    "distributionPath": "/../../temp/neutralinojs/dist"
+  }
+}

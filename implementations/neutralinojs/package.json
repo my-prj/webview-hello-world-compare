@@ -1,0 +1,9 @@
+{
+  "name": "neutralinojs-hello-world-deps",
+  "private": true,
+  "description": "Pinned neu CLI and client library for reproducible phase-1 setup (not application code).",
+  "devDependencies": {
+    "@neutralinojs/lib": "6.9.0",
+    "@neutralinojs/neu": "11.7.2"
+  }
+}

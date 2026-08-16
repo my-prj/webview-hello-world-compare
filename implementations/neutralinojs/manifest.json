@@ -1,0 +1,112 @@
+{
+  "slug": "neutralinojs",
+  "upstream": "https://github.com/neutralinojs/neutralinojs",
+  "phase": 2,
+  "phase_status": "complete",
+  "run_date": "2026-08-16",
+  "platform": {
+    "os": "macOS",
+    "arch": "arm64"
+  },
+  "version_selection": {
+    "requested": "latest stable (2026-08-16)",
+    "latest_stable_tag": "v6.9.0",
+    "latest_stable_published": "2026-07-24T08:26:14Z",
+    "selected_tag": "v6.9.0",
+    "selected_reason": "Latest stable Neutralinojs framework release on run date."
+  },
+  "components": {
+    "neutralinojs_framework": {
+      "version": "6.9.0",
+      "tag": "v6.9.0",
+      "commit": "2cec764ac5e3ccc5b1b44d046d6e6d6c85c3099e",
+      "fetch": {
+        "url": "https://github.com/neutralinojs/neutralinojs/releases/download/v6.9.0/neutralinojs-v6.9.0.zip",
+        "archive": "temp/neutralinojs/downloads/neutralinojs-v6.9.0.zip",
+        "size_bytes": 8050711
+      },
+      "binary_mac_arm64": {
+        "path": "temp/neutralinojs/bin/neutralino-mac_arm64",
+        "arch": "arm64",
+        "format": "Mach-O 64-bit executable"
+      }
+    },
+    "neu_cli": {
+      "package": "@neutralinojs/neu",
+      "version": "11.7.2",
+      "install": "temp/neutralinojs/npm",
+      "binary": "temp/neutralinojs/npm/node_modules/.bin/neu",
+      "upstream": "https://github.com/neutralinojs/neutralinojs-cli"
+    },
+    "client_library": {
+      "package": "@neutralinojs/lib",
+      "version": "6.9.0",
+      "install": "temp/neutralinojs/npm/node_modules/@neutralinojs/lib",
+      "upstream": "https://github.com/neutralinojs/neutralino.js",
+      "note": "Installed for neu CLI; not bundled in app (enableNativeAPI=false, no neutralino.js in resources)."
+    },
+    "node": {
+      "version": "v26.0.0",
+      "npm": "11.12.1",
+      "provider": "system",
+      "note": "Required to run neu CLI; not vendored under temp/neutralinojs/"
+    }
+  },
+  "implementation": {
+    "languages": ["JSON", "HTML"],
+    "config": "implementations/neutralinojs/neutralino.config.json",
+    "html": "implementations/neutralinojs/resources/index.html",
+    "bundle": "implementations/neutralinojs/Info.plist",
+    "build_script": "implementations/neutralinojs/build.sh",
+    "bundle_name": "HelloWorld.app",
+    "bundle_id": "com.webview-hello-world-compare.neutralinojs",
+    "size_optimization": {
+      "neu_build_flags": ["--release", "--embed-resources"],
+      "config": {
+        "enableNativeAPI": false,
+        "logging.enabled": false,
+        "modes.window.enableInspector": false
+      },
+      "note": "Resources embedded via postject; external resources.neu removed after build. Wrapped in standard .app bundle (Info.plist + Contents/MacOS/) because neu --macos-bundle requires all three macOS binaries in bin/."
+    }
+  },
+  "paths": {
+    "temp_root": "temp/neutralinojs",
+    "binaries": "temp/neutralinojs/bin",
+    "downloads": "temp/neutralinojs/downloads",
+    "npm_root": "temp/neutralinojs/npm",
+    "build_dist": "temp/neutralinojs/dist",
+    "app_output": "temp/neutralinojs/HelloWorld.app"
+  },
+  "setup": {
+    "script": "implementations/neutralinojs/setup-deps.sh",
+    "npm_manifest": "implementations/neutralinojs/package.json",
+    "npm_lockfile": "implementations/neutralinojs/package-lock.json"
+  },
+  "build": {
+    "script": "implementations/neutralinojs/build.sh",
+    "command": "neu build --release --embed-resources --clean",
+    "dev_command": "neu run"
+  },
+  "env": {
+    "PATH_prefix": ["temp/neutralinojs/npm/node_modules/.bin"]
+  },
+  "metrics": {
+    "temp_neutralinojs_size_kb": 28548,
+    "temp_neutralinojs_size_human": "28M",
+    "breakdown": {
+      "downloads_kb": 8220,
+      "bin_kb": 3584,
+      "npm_kb": 13920,
+      "dist_kb": 4,
+      "app_kb": 2840
+    },
+    "phase1_wall_seconds": 78,
+    "phase2_wall_seconds": 900,
+    "build_sh_seconds": 2,
+    "local_app_size_kb": 2840,
+    "local_app_binary_kb": 2820,
+    "local_app_path": "temp/neutralinojs/HelloWorld.app"
+  },
+  "blockers": []
+}

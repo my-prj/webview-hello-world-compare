@@ -1,0 +1,89 @@
+name: neutralinojs
+
+on:
+  push:
+    paths:
+      - ".github/workflows/neutralinojs.yml"
+      - "implementations/neutralinojs/**"
+      - "index.html"
+  pull_request:
+    paths:
+      - ".github/workflows/neutralinojs.yml"
+      - "implementations/neutralinojs/**"
+      - "index.html"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Record runner and system toolchain
+        id: env
+        run: |
+          set -euo pipefail
+          {
+            echo "runner_image=${RUNNER_OS}-${ImageOS:-unknown}"
+            echo "macos_version=$(sw_vers -productVersion)"
+            echo "macos_build=$(sw_vers -buildVersion)"
+            echo "arch=$(uname -m)"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "## Runner" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Image: \`${RUNNER_OS}\` / \`${ImageOS:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- macOS: $(sw_vers -productVersion) ($(sw_vers -buildVersion))" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Arch: $(uname -m)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Setup dependencies
+        run: ./implementations/neutralinojs/setup-deps.sh
+
+      - name: Record vendored tool versions
+        id: tools
+        run: |
+          set -euo pipefail
+          export PATH="$PWD/temp/neutralinojs/npm/node_modules/.bin:$PATH"
+          {
+            echo "node_version=$(node --version)"
+            echo "npm_version=$(npm --version)"
+            echo "neu_version=$(neu version | head -n 1)"
+            echo "neutralino_binary_version=$(grep '"version"' temp/neutralinojs/npm/node_modules/@neutralinojs/lib/package.json | head -n 1 | sed 's/.*: *"\([^"]*\)".*/\1/')"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "## Tools" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Node: $(node --version)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- npm: $(npm --version)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- neu: $(neu version | head -n 1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- @neutralinojs/lib: $(grep '"version"' temp/neutralinojs/npm/node_modules/@neutralinojs/lib/package.json | head -n 1 | sed 's/.*: *"\([^"]*\)".*/\1/')" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Binary: \`temp/neutralinojs/bin/neutralino-mac_arm64\` ($(file temp/neutralinojs/bin/neutralino-mac_arm64 | cut -d: -f2-))" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build unsigned release .app
+        run: ./implementations/neutralinojs/build.sh
+
+      - name: Measure .app size
+        id: size
+        run: |
+          set -euo pipefail
+          APP="$PWD/temp/neutralinojs/HelloWorld.app"
+          test -d "$APP"
+          KB="$(du -sk "$APP" | awk '{print $1}')"
+          echo "app_size_kb=$KB" >> "$GITHUB_OUTPUT"
+          echo "## Result" >> "$GITHUB_STEP_SUMMARY"
+          echo "- \`HelloWorld.app\`: **${KB} KB** (\`du -sk\`)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create release archive
+        run: |
+          set -euo pipefail
+          cd temp/neutralinojs
+          ditto -c -k --keepParent HelloWorld.app HelloWorld.app.zip
+          du -sk HelloWorld.app.zip
+
+      - name: Upload release archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: neutralinojs-HelloWorld.app
+          path: temp/neutralinojs/HelloWorld.app.zip
+          if-no-files-found: error
