@@ -4,9 +4,7 @@
 
 - Create or amend a commit only when the user explicitly asks for it or grants explicit permission.
 - Push only when the user explicitly asks for it or grants separate explicit permission in addition to permission to commit.
-- Every agent-created commit must include a co-author trailer that identifies the concrete model used by that agent. Use this form:
-
-  `Co-authored-by: Codex (MODEL_NAME) <noreply@openai.com>`
+- Agent-created commits: exactly one co-author trailer — the model you run as and this agent's email.
 
 ## Reproducibility and repository contents
 
