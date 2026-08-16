@@ -39,6 +39,10 @@ Stable 2.4.2 has no macOS WKWebView sources; **2.5.0-beta.3** selected for WebVi
 - Mirrors local contract: `setup-deps.sh` → `build.sh` → `du -sk` → zip artifact.
 - No vendored CMake/Ninja in CI — same as local phase 2 (direct `clang++` + GNUmakefile for `libwebui-2-static.a`).
 
+- Pushed in commit `9f44ab0`.
+
 ### CI status (pending)
 
+- Run: [31962557483](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31962557483) — **queued** at time of recording.
+- T3 (DevOps session): **33 s** — workflow setup and push only; no GHA queue/run wait.
 - T4 and CI Result `.app`: **pending** until the workflow run completes.

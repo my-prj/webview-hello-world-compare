@@ -75,16 +75,16 @@
     "app_binary_kb": 209,
     "local_app_size_kb": 220,
     "local_app_path": "temp/webui/HelloWorld.app",
-    "phase3_wall_seconds": null,
-    "ci_run_url": null,
-    "ci_run_id": null,
+    "phase3_wall_seconds": 33,
+    "ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31962557483",
+    "ci_run_id": 31962557483,
     "ci_app_size_kb": null,
     "ci_job_seconds": null
   },
   "ci": {
     "workflow": ".github/workflows/webui.yml",
     "status": "pending",
-    "commit": null,
+    "commit": "9f44ab0",
     "runner": {
       "image": "macos-26-arm64"
     },
