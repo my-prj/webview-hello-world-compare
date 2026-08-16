@@ -2,7 +2,7 @@
   "slug": "saucer",
   "upstream": "https://github.com/saucer/saucer",
   "phase": 3,
-  "phase_status": "partial",
+  "phase_status": "complete",
   "run_date": "2026-08-16",
   "platform": {
     "os": "macOS",
@@ -114,19 +114,24 @@
     "local_app_path": "temp/saucer/HelloWorld.app",
     "ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963292986",
     "ci_run_id": 31963292986,
-    "ci_app_size_kb": null,
-    "ci_job_seconds": null,
+    "ci_app_size_kb": 336,
+    "ci_zip_size_kb": 116,
+    "ci_job_seconds": 74,
     "previous_ci_run_id": 31960312213,
     "previous_ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31960312213",
     "previous_ci_run_note": "cancelled after ~45 min GHA queue; rolled back"
   },
   "ci": {
     "workflow": ".github/workflows/saucer.yml",
-    "status": "pending",
+    "status": "success",
     "commit": "75008c9",
     "runner": {
-      "image": "macos-latest",
-      "note": "Apple Silicon arm64; same label as webview workflow"
+      "image": "macos-26-arm64",
+      "release": "20260728.0273",
+      "macos_version": "26.5.2"
+    },
+    "toolchain": {
+      "apple_clang": "21.0.0.21000101"
     },
     "artifact": {
       "name": "saucer-HelloWorld.app",

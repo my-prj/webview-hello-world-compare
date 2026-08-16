@@ -30,11 +30,11 @@ See `manifest.json` for dependency versions and download weight (~385M under `te
 
 - `./implementations/saucer/build.sh` runs `setup-deps.sh`, syncs HTML, configures Ninja release for `arm64`, builds, and stages the app under `temp/saucer/HelloWorld.app`.
 
-## Phase 3 (2026-08-16, partial — redo)
+## Phase 3 (2026-08-16)
 
 ### GitHub Actions
 
-- Workflow: `.github/workflows/saucer.yml` on `macos-latest` (Apple Silicon; same pattern as `webview`).
+- Workflow: `.github/workflows/saucer.yml` on `macos-latest` (`macos-26-arm64`, release `20260728.0273`).
 - Mirrors local contract: `setup-deps.sh` → `build.sh` → `du -sk` → zip artifact.
 - Pushed in commit `75008c9`.
 
@@ -42,8 +42,9 @@ See `manifest.json` for dependency versions and download weight (~385M under `te
 
 - Run [31960312213](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31960312213) — **cancelled** after ~45 min in GHA queue; prior DevOps session interrupted (~34 min wall time including queue — not a reliable T3).
 
-### CI status (pending)
+### CI results
 
-- Run: [31963292986](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963292986) — **queued** at time of recording.
+- Successful run: [31963292986](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963292986).
 - T3 (DevOps session): **6 s** — workflow setup and push only; no GHA queue/run wait.
-- T4 and CI Result `.app`: **pending** until the workflow run completes.
+- T4 (job): **74 s**; Result `.app`: **336 KB** (matches local); zip artifact: 116 KB.
+- Runner: macOS 26.5.2, AppleClang 21.0.0; vendored CMake 4.4.2, Ninja 1.13.2, saucer v8.0.5.
