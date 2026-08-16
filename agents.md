@@ -4,7 +4,7 @@
 
 - Create or amend a commit only when the user explicitly asks for it or grants explicit permission.
 - Push only when the user explicitly asks for it or grants separate explicit permission in addition to permission to commit.
-- Agent-created commits: exactly one co-author trailer — the model you run as and this agent's email.
+- Agent-created commits: exactly one co-author trailer — the model you run as and this agent's email. Turn off Cursor **Attribution** (Settings → Agent) so the IDE does not inject a second one.
 
 ## Reproducibility and repository contents
 
