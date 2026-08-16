@@ -36,6 +36,7 @@ See `manifest.json` for dependency versions and download weight (~385M under `te
 
 - Workflow: `.github/workflows/saucer.yml` on `macos-latest` (Apple Silicon; same pattern as `webview`).
 - Mirrors local contract: `setup-deps.sh` → `build.sh` → `du -sk` → zip artifact.
+- Pushed in commit `75008c9`.
 
 ### Previous attempt (rolled back)
 
@@ -43,4 +44,6 @@ See `manifest.json` for dependency versions and download weight (~385M under `te
 
 ### CI status (pending)
 
-- T4 and CI Result `.app`: **pending** until the new workflow run completes.
+- Run: [31963292986](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963292986) — **queued** at time of recording.
+- T3 (DevOps session): **6 s** — workflow setup and push only; no GHA queue/run wait.
+- T4 and CI Result `.app`: **pending** until the workflow run completes.

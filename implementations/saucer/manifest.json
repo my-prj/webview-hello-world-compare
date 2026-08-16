@@ -108,12 +108,12 @@
     "phase1_wall_seconds": 302,
     "phase2_wall_seconds": 240,
     "phase2_build_script_seconds": 16,
-    "phase3_wall_seconds": null,
+    "phase3_wall_seconds": 6,
     "local_app_size_kb": 336,
     "local_app_binary_kb": 328,
     "local_app_path": "temp/saucer/HelloWorld.app",
-    "ci_run_url": null,
-    "ci_run_id": null,
+    "ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963292986",
+    "ci_run_id": 31963292986,
     "ci_app_size_kb": null,
     "ci_job_seconds": null,
     "previous_ci_run_id": 31960312213,
@@ -123,7 +123,7 @@
   "ci": {
     "workflow": ".github/workflows/saucer.yml",
     "status": "pending",
-    "commit": null,
+    "commit": "75008c9",
     "runner": {
       "image": "macos-latest",
       "note": "Apple Silicon arm64; same label as webview workflow"
