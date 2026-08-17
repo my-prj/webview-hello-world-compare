@@ -8,13 +8,13 @@ The comparison focuses on developer experience, language and dependency footprin
 
 ## RESULT
 
-| Project | Link | Result `.app` | T1 | T2 | T3 | T4 | Languages | Dependencies | Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| webview/webview | https://github.com/webview/webview | 80 KB | 294s | 34s | 620s | 25s | C++11 | webview 0.12.0 (header-only); vendored CMake 4.4.2 + Ninja 1.13.2 (~364M under `temp/webview/`) | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, AppleClang 21.0.0; artifact zip 20 KB; [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31959767420) |
-| Saucer | https://github.com/saucer/saucer | 336 KB | 302s | 240s | 6s | 74s | C++23, Objective-C++ | saucer 8.0.5 + 11 CPM git deps; vendored CMake 4.4.2 + Ninja 1.13.2 (~418M under `temp/saucer/`) | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, AppleClang 21.0.0; build.sh 16s; artifact zip 116 KB; [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963292986); prior run [31960312213](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31960312213) cancelled (GHA queue) |
-| WebUI | https://github.com/webui-dev/webui | 220 KB | 41s | 480s | 33s | 18s | C++17 | webui 2.5.0-beta.3 (static lib); ~14M under `temp/webui/` (no vendored CMake/Ninja) | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, AppleClang 21.0.0; build.sh 1s; artifact zip 84 KB; local `.app` 220 KB (matches CI); prior run [31962557483](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31962557483) cancelled (GHA queue on `macos-26-arm64` label); [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31986445523) |
-| Neutralinojs | https://github.com/neutralinojs/neutralinojs | 2824 KB | 78s | 900s | 195s | 21s | JSON, HTML | neutralinojs 6.9.0 + neu CLI 11.7.2; ~28M under `temp/neutralinojs/` | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, Node v24.18.0; build.sh 2s; artifact zip 872 KB; local `.app` 2840 KB; [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963765822) |
-| Tauri | https://github.com/tauri-apps/tauri | 2228 KB | 768s | 278s | 157s | 123s | Rust, HTML, JSON | tauri 2.11.5 + CLI 2.11.4 + Rust 1.96.0; ~2.2G under `temp/tauri/` | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, AppleClang 21.0.0, Rust 1.96.0, Node v24.18.0; build.sh 37s; artifact zip 1144 KB; local `.app` 2228 KB (matches CI); [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31964923436) |
+| Project | Link | Result `.app` | Result `.zip` | T1 | T2 | T3 | T4 | Languages | Dependencies | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| webview/webview | https://github.com/webview/webview | 80 KB | 20 KB | 294s | 34s | 620s | 25s | C++11 | webview 0.12.0 (header-only); vendored CMake 4.4.2 + Ninja 1.13.2 (~364M under `temp/webview/`) | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, AppleClang 21.0.0; [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31959767420) |
+| Saucer | https://github.com/saucer/saucer | 336 KB | 116 KB | 302s | 240s | 6s | 74s | C++23, Objective-C++ | saucer 8.0.5 + 11 CPM git deps; vendored CMake 4.4.2 + Ninja 1.13.2 (~418M under `temp/saucer/`) | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, AppleClang 21.0.0; build.sh 16s; [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963292986); prior run [31960312213](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31960312213) cancelled (GHA queue) |
+| WebUI | https://github.com/webui-dev/webui | 220 KB | 84 KB | 41s | 480s | 33s | 18s | C++17 | webui 2.5.0-beta.3 (static lib); ~14M under `temp/webui/` (no vendored CMake/Ninja) | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, AppleClang 21.0.0; build.sh 1s; prior run [31962557483](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31962557483) cancelled (GHA queue on `macos-26-arm64` label); [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31986445523) |
+| Neutralinojs | https://github.com/neutralinojs/neutralinojs | 2824 KB | 872 KB | 78s | 900s | 195s | 21s | JSON, HTML | neutralinojs 6.9.0 + neu CLI 11.7.2; ~28M under `temp/neutralinojs/` | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, Node v24.18.0; build.sh 2s; local `.app` 2840 KB; [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963765822) |
+| Tauri | https://github.com/tauri-apps/tauri | 2228 KB | 1144 KB | 768s | 278s | 157s | 123s | Rust, HTML, JSON | tauri 2.11.5 + CLI 2.11.4 + Rust 1.96.0; ~2.2G under `temp/tauri/` | runner `macos-26-arm64` (20260728.0273), macOS 26.5.2, AppleClang 21.0.0, Rust 1.96.0, Node v24.18.0; build.sh 37s; [CI run](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31964923436) |
 
 ### Metrics
 
@@ -27,11 +27,12 @@ Measure these objective values for every slug:
 | T3 | DevOps setup time through final workflow status | Subagent session wall time for phase 3 |
 | T4 | GitHub Actions build duration | GitHub Actions run data |
 | Result `.app` | Final uncompressed application bundle size | CI artifact from phase 3 |
+| Result `.zip` | Compressed `.app` archive published for download | CI artifact from phase 3 |
 
-- Measure Result `.app` with `du -sk <path-to>.app` and report the size in kilobytes
+- Measure Result `.app` with `du -sk <path-to>.app` and Result `.zip` with `du -sk <path-to>.zip`; report sizes in kilobytes
 - Do not split agent time from network, build, or waiting overhead; total wall time is the metric
 - Dependency and toolchain weight belong in the Dependencies column or Notes when measured
-- Each implementation should additionally publish a downloadable release archive containing the `.app` bundle; archive size may be recorded in Notes but is not the primary comparison metric
+- Result `.app` is the primary size comparison metric; Result `.zip` reflects packaging for download, not the on-disk application bundle
 
 ## RULES
 
@@ -108,10 +109,11 @@ Run three subagents per slug, in order. Start the next slug only after all three
 
 - **Link**: upstream project repository
 - **Result `.app`**: final uncompressed `.app` size from CI
+- **Result `.zip`**: compressed `.app` archive size from CI
 - **T1–T4**: timing columns defined in Metrics above
 - **Languages**: languages used in the implementation plus any required runtime
 - **Dependencies**: concise summary of dependency types and measured toolchain or download weight when available
-- **Notes**: runner image, actual tool versions, local preview size, blockers, attempt count, and secondary archive size
+- **Notes**: runner image, actual tool versions, local preview size, blockers, and attempt count
 
 ### Experience log
 
