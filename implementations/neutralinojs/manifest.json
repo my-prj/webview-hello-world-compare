@@ -61,13 +61,13 @@
     "bundle_name": "HelloWorld.app",
     "bundle_id": "com.webview-hello-world-compare.neutralinojs",
     "size_optimization": {
-      "neu_build_flags": ["--release", "--embed-resources"],
+      "neu_build_flags": ["--release"],
       "config": {
         "enableNativeAPI": false,
         "logging.enabled": false,
         "modes.window.enableInspector": false
       },
-      "note": "Resources embedded via postject; external resources.neu removed after build. Wrapped in standard .app bundle (Info.plist + Contents/MacOS/) because neu --macos-bundle requires all three macOS binaries in bin/."
+      "note": "External resources.neu in Contents/MacOS/ (--embed-resources breaks on macOS 26 dyld). Wrapped in standard .app bundle (Info.plist + Contents/MacOS/) because neu --macos-bundle requires all three macOS binaries in bin/."
     }
   },
   "paths": {
@@ -85,7 +85,7 @@
   },
   "build": {
     "script": "implementations/neutralinojs/build.sh",
-    "command": "neu build --release --embed-resources --clean",
+    "command": "neu build --release --clean",
     "dev_command": "neu run"
   },
   "env": {

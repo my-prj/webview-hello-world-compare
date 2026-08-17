@@ -38,6 +38,16 @@ Reproduce: `./implementations/neutralinojs/build.sh` → `temp/neutralinojs/Hell
 - Framework runtime uses system WebKit; no extra runtime bundled beyond the Neutralino binary with embedded resources.
 - GUI smoke test via `open` was not reliable in the agent shell (Launch Services error 163); direct execution and `neu run` start successfully.
 
+### Post-phase fix (2026-08-17)
+
+#### Finder launch: dyld rejects embedded binary on macOS 26
+
+- Double-clicking `HelloWorld.app` failed with Launch Services error 163; direct execution showed:
+  `dyld: section '__NEUTRALINOJS_R__POSTJECT' end address … is beyond containing segment's end address …`
+- Cause: `neu build --embed-resources` injects `resources.neu` via postject; the resulting Mach-O layout is rejected by dyld on macOS 26. A symlinked `bin/neutralino-mac_arm64` could also be corrupted in place when postject followed the link.
+- Fix: drop `--embed-resources`; ship `resources.neu` next to the executable under `Contents/MacOS/`; copy (not symlink) the framework binary into `implementations/neutralinojs/bin/`; ad-hoc sign the `.app` with `codesign --sign -`; restore the pristine release binary in `setup-deps.sh` when its size no longer matches the v6.9.0 zip.
+- Size impact: `.app` stays ~2848 KB (`du -sk`) vs ~2824 KB with broken embed — negligible for a working bundle.
+
 ### CI results
 
 - Successful run: [31963765822](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31963765822).

@@ -10,6 +10,8 @@ BINARY_TAG="v${BINARY_VERSION}"
 BINARY_ZIP="neutralinojs-${BINARY_TAG}.zip"
 BINARY_URL="https://github.com/neutralinojs/neutralinojs/releases/download/${BINARY_TAG}/${BINARY_ZIP}"
 MAC_ARM64_BINARY="neutralino-mac_arm64"
+# Pristine size of neutralino-mac_arm64 in neutralinojs v6.9.0 release zip.
+MAC_ARM64_BINARY_SIZE=2905720
 
 mkdir -p "$TEMP/downloads" "$TEMP/bin" "$TEMP/npm"
 
@@ -25,7 +27,9 @@ download() {
 
 download "$BINARY_URL" "$TEMP/downloads/${BINARY_ZIP}"
 
-if [[ ! -x "$TEMP/bin/${MAC_ARM64_BINARY}" ]]; then
+if [[ ! -x "$TEMP/bin/${MAC_ARM64_BINARY}" ]] \
+  || [[ "$(stat -f%z "$TEMP/bin/${MAC_ARM64_BINARY}")" != "$MAC_ARM64_BINARY_SIZE" ]]; then
+  rm -f "$TEMP/bin/${MAC_ARM64_BINARY}"
   rm -rf "$TEMP/.extract-binaries"
   mkdir -p "$TEMP/.extract-binaries"
   unzip -q -o "$TEMP/downloads/${BINARY_ZIP}" -d "$TEMP/.extract-binaries"
