@@ -2,7 +2,7 @@
   "slug": "webui",
   "upstream": "https://github.com/webui-dev/webui",
   "phase": 3,
-  "phase_status": "partial",
+  "phase_status": "complete",
   "run_date": "2026-08-16",
   "platform": {
     "os": "macOS",
@@ -76,17 +76,24 @@
     "local_app_size_kb": 220,
     "local_app_path": "temp/webui/HelloWorld.app",
     "phase3_wall_seconds": 33,
-    "ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31962557483",
-    "ci_run_id": 31962557483,
-    "ci_app_size_kb": null,
-    "ci_job_seconds": null
+    "ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31986445523",
+    "ci_run_id": 31986445523,
+    "ci_app_size_kb": 220,
+    "ci_zip_size_kb": 84,
+    "ci_job_seconds": 18,
+    "previous_ci_run_id": 31962557483,
+    "previous_ci_run_url": "https://github.com/my-prj/webview-hello-world-compare/actions/runs/31962557483",
+    "previous_ci_run_note": "cancelled after 8h+ GHA queue on macos-26-arm64 workflow label; fixed by runs-on macos-latest"
   },
   "ci": {
     "workflow": ".github/workflows/webui.yml",
-    "status": "pending",
-    "commit": "9f44ab0",
+    "status": "success",
+    "commit": "82c31f1",
     "runner": {
-      "image": "macos-26-arm64"
+      "image": "macos-26-arm64",
+      "release": "20260728.0273",
+      "macos_version": "26.5.2",
+      "workflow_label": "macos-latest"
     },
     "artifact": {
       "name": "webui-HelloWorld.app",

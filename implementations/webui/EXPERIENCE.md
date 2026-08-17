@@ -31,18 +31,21 @@ Stable 2.4.2 has no macOS WKWebView sources; **2.5.0-beta.3** selected for WebVi
 
 - `./implementations/webui/build.sh` runs `setup-deps.sh`, syncs HTML, builds release binary for `arm64`, and stages the app under `temp/webui/HelloWorld.app`.
 
-## Phase 3 (2026-08-16, partial)
+## Phase 3 (2026-08-16, completed 2026-08-17)
 
 ### GitHub Actions
 
-- Workflow: `.github/workflows/webui.yml` on `macos-26-arm64`.
+- Workflow: `.github/workflows/webui.yml` on `macos-latest` (resolves to `macos-26-arm64`, release `20260728.0273`).
 - Mirrors local contract: `setup-deps.sh` → `build.sh` → `du -sk` → zip artifact.
 - No vendored CMake/Ninja in CI — same as local phase 2 (direct `clang++` + GNUmakefile for `libwebui-2-static.a`).
 
-- Pushed in commit `9f44ab0`.
+### Previous attempt (cancelled)
 
-### CI status (pending)
+- Run [31962557483](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31962557483) — **cancelled** after 8h+ in GHA queue; workflow used `runs-on: macos-26-arm64` (dedicated label pool). Fixed by switching to `macos-latest` like the other implementations.
 
-- Run: [31962557483](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31962557483) — **queued** at time of recording.
-- T3 (DevOps session): **33 s** — workflow setup and push only; no GHA queue/run wait.
-- T4 and CI Result `.app`: **pending** until the workflow run completes.
+### CI results
+
+- Successful run: [31986445523](https://github.com/my-prj/webview-hello-world-compare/actions/runs/31986445523).
+- T3 (DevOps session): **33 s** — original workflow setup and push; not re-measured for the runner-label fix.
+- T4 (job): **18 s**; Result `.app`: **220 KB** (matches local); zip artifact: 84 KB.
+- Runner: macOS 26.5.2, AppleClang 21.0.0; webui 2.5.0-beta.3.
